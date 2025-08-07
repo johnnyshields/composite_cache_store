@@ -29,33 +29,37 @@ jobs:
           - jruby-9.4
           - truffleruby
         rails:
+          - '6.0'
           - '6.1'
           - '7.0'
           - '7.1'
+          - '7.2'
           - '8.0'
         exclude:
           - os: windows-latest
             ruby: jruby
           - os: windows-latest
             ruby: truffleruby
+          - rails: '6.0'
+            ruby: '3.4'
           - rails: '6.1'
             ruby: '3.4'
           - rails: '7.0'
             ruby: '3.4'
-          - rails: '7.1'
-            ruby: jruby
-          - rails: '7.1'
-            ruby: truffleruby
+          # - rails: '7.1'
+          #   ruby: jruby
+          # - rails: '7.1'
+          #   ruby: truffleruby
           - rails: '8.0'
             ruby: '2.7'
           - rails: '8.0'
             ruby: '3.0'
           - rails: '8.0'
             ruby: '3.1'
-          - rails: '8.0'
-            ruby: jruby
-          - rails: '8.0'
-            ruby: truffleruby
+          # - rails: '8.0'
+          #   ruby: jruby
+          # - rails: '8.0'
+          #   ruby: truffleruby
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby ${{ matrix.ruby }}
