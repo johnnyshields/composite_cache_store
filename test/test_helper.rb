@@ -3,21 +3,22 @@
 require "bundler"
 require "pry-byebug"
 
-if ENV["CCS_TEST_ALL"]
-  spec = Bundler.locked_gems.specs.find { |spec| spec.name == "activesupport" }
-  path = spec.source.install_path
-  $LOAD_PATH.prepend path.join("activesupport/test")
-  $LOAD_PATH.prepend path.join("activesupport/lib") # needed by activerecord test files that require activesupport lib files
-end
-
 require "active_support/all"
-require "testing/method_call_assertions_test" # path: activesupport/test/testing/method_call_assertions_test.rb
-require "cache/behaviors" # path: activesupport/test/cache/behaviors.rb
+activesupport_version = ActiveSupport.version.to_s
+
+# Clone the repo version of Rails to use its test helpers
+TMP_CLONE_DIR = File.join(Dir.tmpdir, "rails_#{activesupport_version}")
+unless Dir.exist?(TMP_CLONE_DIR)
+  puts "Cloning Rails repo to #{TMP_CLONE_DIR}..."
+  system("git clone --depth=1 --branch v#{activesupport_version} https://github.com/rails/rails.git #{TMP_CLONE_DIR}")
+end
+require "#{TMP_CLONE_DIR}/activesupport/test/testing/method_call_assertions_test"
+require "#{TMP_CLONE_DIR}/activesupport/test/cache/behaviors"
 
 # cache test behavior overrides
-require "behaviors/composite_cache_store_behavior"
-require "behaviors/composite_cache_increment_decrement_behavior"
-require "behaviors/composite_cache_store_coder_behavior"
+require_relative "behaviors/composite_cache_store_behavior"
+require_relative "behaviors/composite_cache_increment_decrement_behavior"
+require_relative "behaviors/composite_cache_store_coder_behavior"
 
 require "minitest/reporters"
 Minitest::Reporters.use!
