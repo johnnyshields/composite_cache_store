@@ -61,7 +61,7 @@ jobs:
         env:
           RAILS_VERSION: ${{ matrix.rails }}
         with:
-          ruby: ${{ matrix.ruby }}
+          ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - name: Run ruby tests
         env:
