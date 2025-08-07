@@ -1,12 +1,6 @@
 name: Tests
 
-on:
-  pull_request:
-    branches:
-      - '*'
-  push:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
   ruby_test:
