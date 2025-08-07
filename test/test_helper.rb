@@ -19,6 +19,8 @@ def use_rails_repo(version = nil)
   end
   require "#{dir}/activesupport/test/testing/method_call_assertions_test"
   require "#{dir}/activesupport/test/cache/behaviors"
+  $LOAD_PATH.prepend path.join("#{dir}/activesupport/test")
+  $LOAD_PATH.prepend path.join("#{dir}/activesupport/lib")
 end
 
 require "active_support/all"
