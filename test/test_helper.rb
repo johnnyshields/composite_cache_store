@@ -17,10 +17,16 @@ def use_rails_repo(version = nil)
       system("git checkout#{" v#{version}" if version}")
     end
   end
-  $LOAD_PATH.prepend "#{dir}/activesupport/test"
-  $LOAD_PATH.prepend "#{dir}/activesupport/lib"
-  require "#{dir}/activesupport/test/testing/method_call_assertions_test"
-  require "#{dir}/activesupport/test/cache/behaviors"
+
+  paths = ["#{dir}/activesupport/test", "#{dir}/activesupport/lib"]
+  begin
+    $LOAD_PATH.unshift(*paths)
+    require "#{dir}/activesupport/test/testing/method_call_assertions_test"
+    require "#{dir}/activesupport/test/cache/behaviors"
+  rescue StandardError => e
+    $LOAD_PATH -= paths
+    raise e
+  end
 end
 
 require "active_support/all"
