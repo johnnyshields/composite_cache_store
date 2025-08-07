@@ -111,12 +111,20 @@ class CompositeCacheStore
 
   def increment(name, amount = 1, options = nil)
     provisional_layers.each { |layer| layer.delete(name, options) }
-    layers.last.increment(name, amount, options)
+    if ActiveSupport.version.to_s >= '8'
+      layers.last.increment(name, amount, **options)
+    else
+      layers.last.increment(name, amount, options)
+    end
   end
 
   def decrement(name, amount = 1, options = nil)
     provisional_layers.each { |layer| layer.delete(name, options) }
-    layers.last.decrement(name, amount, options)
+    if ActiveSupport.version.to_s >= '8'
+      layers.last.decrement(name, amount, **options)
+    else
+      layers.last.decrement(name, amount, options)
+    end
   end
 
   def cleanup(...)
