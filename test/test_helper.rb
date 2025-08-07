@@ -2,12 +2,20 @@
 
 require "bundler"
 require "pry-byebug"
+require "fileutils"
 
 def use_rails_repo(version = nil)
-  dir = File.join(Dir.tmpdir, "rails_#{version || 'main'}")
+  tmp = File.join(__dir__, '../tmp')
+  FileUtils.mkdir_p(tmp)
+  dir = File.join(tmp, "rails_#{version || 'main'}")
   unless Dir.exist?(dir)
     puts "Cloning Rails repo to #{dir}..."
-    system("git clone --depth=1#{" --branch v#{version}" if version} https://github.com/rails/rails.git #{dir}")
+    system("git clone --sparse --depth=1 --filter=blob:none https://github.com/rails/rails.git #{dir}")
+    Dir.chdir(dir) do
+      system('git sparse-checkout init --cone')
+      system('git sparse-checkout set activesupport tools')
+      system("git checkout#{" v#{version}" if version}")
+    end
   end
   require "#{dir}/activesupport/test/testing/method_call_assertions_test"
   require "#{dir}/activesupport/test/cache/behaviors"
