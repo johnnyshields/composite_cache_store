@@ -13,7 +13,7 @@ jobs:
           - macos-latest
           - ubuntu-latest
           - windows-latest
-        ruby-version:
+        ruby:
           - '2.7'
           - '3.0'
           - '3.1'
@@ -22,7 +22,7 @@ jobs:
           - '3.4'
           - jruby-9.4
           - truffleruby
-        rails-version:
+        rails:
           - '6.0'
           - '6.1'
           - '7.0'
@@ -31,39 +31,39 @@ jobs:
           - '8.0'
         exclude:
           - os: windows-latest
-            ruby-version: jruby
+            ruby: jruby
           - os: windows-latest
-            ruby-version: truffleruby
-          - rails-version: '6.0'
-            ruby-version: '3.4'
-          - rails-version: '6.1'
-            ruby-version: '3.4'
-          - rails-version: '7.0'
-            ruby-version: '3.4'
+            ruby: truffleruby
+          - rails: '6.0'
+            ruby: '3.4'
+          - rails: '6.1'
+            ruby: '3.4'
+          - rails: '7.0'
+            ruby: '3.4'
           # - rails: '7.1'
           #   ruby: jruby
           # - rails: '7.1'
           #   ruby: truffleruby
-          - rails-version: '8.0'
-            ruby-version: '2.7'
-          - rails-version: '8.0'
-            ruby-version: '3.0'
-          - rails-version: '8.0'
-            ruby-version: '3.1'
+          - rails: '8.0'
+            ruby: '2.7'
+          - rails: '8.0'
+            ruby: '3.0'
+          - rails: '8.0'
+            ruby: '3.1'
           # - rails: '8.0'
           #   ruby: jruby
           # - rails: '8.0'
           #   ruby: truffleruby
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Ruby ${{ matrix.ruby-version }}
+      - name: Set up Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         env:
-          RAILS_VERSION: ${{ matrix.rails-version }}
+          RAILS_VERSION: ${{ matrix.rails }}
         with:
-          ruby-version: ${{ matrix.ruby-version }}
+          ruby: ${{ matrix.ruby }}
           bundler-cache: true
       - name: Run ruby tests
         env:
-          RAILS_VERSION: ${{ matrix.rails-version }}
+          RAILS_VERSION: ${{ matrix.rails }}
         run: bundle exec rake test

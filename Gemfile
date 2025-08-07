@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 if ENV["GITHUB_ACTIONS"] || ENV["COMPOSITE_CACHE_STORE_ENV"] == "test"
   case (rails_version = ENV["RAILS_VERSION"])
-  when "master", "main"
+  when "master", "main", "edge"
     git "https://github.com/rails/rails.git" do
       gem "activesupport", require: "active_support"
     end
