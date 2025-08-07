@@ -25,7 +25,7 @@ task :test do
 end
 
 task :test_all do
-  ENV["COMPOSITE_CACHE_STORE_ENV"] = "test"
+  ENV["CCS_TEST_ALL"] = "test"
   rails_versions.each do |rails_version|
     ENV["RAILS_VERSION"] = rails_version
     puts Paint % ["Bundling activesupport %{version}", :blue, :underline, version: [rails_version, "sky blue", :underline]]
@@ -36,7 +36,7 @@ task :test_all do
     Rake::Task["minitest"].reenable unless rails_version == rails_versions.last
   end
 ensure
-  ENV["COMPOSITE_CACHE_STORE_ENV"] = nil
+  ENV["CCS_TEST_ALL"] = nil
   print Paint["Restoring bundle with activesupport from rubygems... ", :blue]
   `bundle update activesupport`
   puts "done!"

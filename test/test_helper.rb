@@ -3,10 +3,12 @@
 require "bundler"
 require "pry-byebug"
 
-spec = Bundler.locked_gems.specs.find { |spec| spec.name == "activesupport" }
-path = spec.source.install_path
-$LOAD_PATH.prepend path.join("activesupport/test")
-$LOAD_PATH.prepend path.join("activesupport/lib") # needed by activerecord test files that require activesupport lib files
+if ENV["CCS_TEST_ALL"]
+  spec = Bundler.locked_gems.specs.find { |spec| spec.name == "activesupport" }
+  path = spec.source.install_path
+  $LOAD_PATH.prepend path.join("activesupport/test")
+  $LOAD_PATH.prepend path.join("activesupport/lib") # needed by activerecord test files that require activesupport lib files
+end
 
 require "active_support/all"
 require "testing/method_call_assertions_test" # path: activesupport/test/testing/method_call_assertions_test.rb
