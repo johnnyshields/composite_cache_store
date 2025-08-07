@@ -111,12 +111,24 @@ class CompositeCacheStore
 
   def increment(name, amount = 1, options = nil)
     provisional_layers.each { |layer| layer.delete(name, options) }
-    layers.last.increment(name, amount, options)
+    if layers.last.method(:increment).arity == 3
+      # Rails 7.2 and earlier
+      layers.last.increment(name, amount, options)
+    else
+      # Rails 8.0+
+      layers.last.increment(name, amount, **options)
+    end
   end
 
   def decrement(name, amount = 1, options = nil)
     provisional_layers.each { |layer| layer.delete(name, options) }
-    layers.last.decrement(name, amount, options)
+    if layers.last.method(:decrement).arity == 3
+      # Rails 7.2 and earlier
+      layers.last.decrement(name, amount, options)
+    else
+      # Rails 8.0+
+      layers.last.decrement(name, amount, **options)
+    end
   end
 
   def cleanup(...)

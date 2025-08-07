@@ -3,12 +3,17 @@
 source "https://rubygems.org"
 
 if ENV["GITHUB_ACTIONS"] || ENV["COMPOSITE_CACHE_STORE_ENV"] == "test"
-  git "https://github.com/rails/rails.git" do
-    if ENV["RAILS_VERSION"]
-      gem "activesupport", require: "active_support", tag: ENV["RAILS_VERSION"]
-    else
+  case (version = ENV["RAILS_VERSION"])
+  when "master", "main"
+    git "https://github.com/rails/rails.git" do
       gem "activesupport", require: "active_support"
     end
+  when /\d+/
+    gem "activesupport", "~> #{version}.0.0", require: "active_support"
+  when /\d+\.\d+/
+    gem "activesupport", "~> #{version}.0", require: "active_support"
+  else
+    gem "activesupport", version, require: "active_support"
   end
 end
 
