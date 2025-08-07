@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "bundler"
-require "pry-byebug"
 require "fileutils"
 
 def use_rails_repo(version = nil)
